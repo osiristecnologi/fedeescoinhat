@@ -1,69 +1,70 @@
-// ESPERA CARREGAR
-document.addEventListener("DOMContentLoaded", () => {
-
-  const searchInput = document.getElementById("searchInput");
-  const cards = document.querySelectorAll(".meme-card");
-
-  // =========================
-  // 🔍 BUSCA
-  // =========================
-  searchInput.addEventListener("input", () => {
-    const value = searchInput.value.toLowerCase();
-
-    cards.forEach(card => {
-      const name = card.innerText.toLowerCase();
-
-      if(name.includes(value)){
-        card.style.display = "block";
-      }else{
-        card.style.display = "none";
-      }
-    });
-  });
-
-  // =========================
-  // 🖱️ CLICK NOS CARDS
-  // =========================
-  cards.forEach(card => {
-    card.addEventListener("click", () => {
-      const title = card.children[0].innerText;
-      const price = card.children[1].innerText;
-
-      openModal(title, price);
-    });
-  });
-
-});
-
-
-// =========================
-// 🪟 MODAL
-// =========================
-function openModal(title, price){
-  const modal = document.getElementById("modal");
-
-  document.getElementById("modalTitle").innerText = title;
-  document.getElementById("modalPrice").innerText = price;
-
-  modal.style.display = "flex";
+// MENU
+function toggleMenu(){
+  document.getElementById("sidebar").classList.toggle("open");
 }
 
+// LANG
+function toggleLang(){
+  let box = document.getElementById("langBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
 
-// =========================
-// ❌ FECHAR MODAL
-// =========================
+// =======================
+// TOKENS (DEXSCREENER API)
+// =======================
+async function loadTokens(){
+
+  const res = await fetch("https://api.dexscreener.com/latest/dex/tokens/eth");
+  const data = await res.json();
+
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  data.pairs.slice(0,20).forEach(t => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <b>${t.baseToken.name}</b>
+      <div>$${t.priceUsd}</div>
+    `;
+
+    card.onclick = () => openModal(t);
+
+    grid.appendChild(card);
+  });
+}
+
+// =======================
+// MODAL TOKEN
+// =======================
+function openModal(t){
+
+  document.getElementById("modal").style.display = "flex";
+
+  document.getElementById("tokenName").innerText = t.baseToken.name;
+  document.getElementById("tokenPrice").innerText = "$" + t.priceUsd;
+
+  document.getElementById("tokenSite").href = t.info?.website || "#";
+  document.getElementById("tokenTwitter").href = t.info?.twitter || "#";
+  document.getElementById("tokenTg").href = t.info?.telegram || "#";
+}
+
+// CLOSE
 function closeModal(){
   document.getElementById("modal").style.display = "none";
 }
 
+// =======================
+// NEWS (EXEMPLO SIMPLES)
+// =======================
+async function loadNews(){
+  const newsDiv = document.getElementById("news");
 
-// =========================
-// 🖱️ FECHAR CLICANDO FORA
-// =========================
-window.onclick = function(e){
-  const modal = document.getElementById("modal");
+  newsDiv.innerHTML = "API notícia aqui (Cointelegraph)";
+}
 
-  if(e.target === modal){
-    modal.style.display = "none";
-  }
-};
+// INIT
+loadTokens();
+loadNews();
