@@ -11,130 +11,92 @@ function toggleLang(){
 }
 
 // =======================
-// 🔥 DADOS GARANTIDOS (fallback)
-// =======================
-const fallbackTokens = [
-  {
-    name:"Pepe",
-    symbol:"PEPE",
-    price:0.0000012,
-    site:"https://pepe.vip",
-    twitter:"https://twitter.com/pepecoineth",
-    telegram:"#"
-  },
-  {
-    name:"Dogecoin",
-    symbol:"DOGE",
-    price:0.15,
-    site:"https://dogecoin.com",
-    twitter:"https://twitter.com/dogecoin",
-    telegram:"#"
-  },
-  {
-    name:"Shiba Inu",
-    symbol:"SHIB",
-    price:0.00002,
-    site:"https://shibatoken.com",
-    twitter:"https://twitter.com/shibtoken",
-    telegram:"#"
-  }
-];
-
-// =======================
-// RENDER
-// =======================
-function render(tokens){
-
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
-
-  tokens.forEach(t => {
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <b>${t.name}</b>
-      <div>$${t.price}</div>
-    `;
-
-    card.onclick = () => openModal(t);
-
-    grid.appendChild(card);
-  });
-}
-
-// =======================
-// API REAL (SE FUNCIONAR)
+// 🔥 BUSCAR TOKENS REAIS (SEM REPETIÇÃO)
 // =======================
 async function loadTokens(){
 
-  try{
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "Carregando...";
 
-    const res = await fetch("https://api.dexscreener.com/latest/dex/search/?q=pepe");
+  try{
+    const res = await fetch("https://api.dexscreener.com/latest/dex/search/?q=trending");
     const data = await res.json();
 
-    if(data.pairs && data.pairs.length > 0){
+    grid.innerHTML = "";
 
-      const tokens = data.pairs.slice(0,20).map(t => ({
-        name:t.baseToken.name,
-        symbol:t.baseToken.symbol,
-        price:t.priceUsd,
-        site:t.info?.website || "#",
-        twitter:t.info?.twitter || "#",
-        telegram:t.info?.telegram || "#"
-      }));
+    // remover duplicados por nome
+    const unique = [];
+    const names = new Set();
 
-      render(tokens);
+    data.pairs.forEach(t => {
+      if(!names.has(t.baseToken.name)){
+        names.add(t.baseToken.name);
+        unique.push(t);
+      }
+    });
 
-    }else{
-      render(fallbackTokens);
-    }
+    unique.slice(0,20).forEach(t => {
+
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <b>${t.baseToken.name}</b>
+        <div>$${Number(t.priceUsd).toFixed(6)}</div>
+      `;
+
+      card.onclick = () => openModal(t);
+
+      grid.appendChild(card);
+    });
 
   }catch(e){
-    render(fallbackTokens);
+    grid.innerHTML = "Erro ao carregar 😢";
   }
 }
 
 // =======================
-// MODAL
+// 🪟 MODAL COMPLETO
 // =======================
 function openModal(t){
 
-  document.getElementById("modal").style.display = "flex";
+  const modal = document.getElementById("modal");
+  modal.style.display = "flex";
 
-  document.getElementById("tokenName").innerText = t.name;
-  document.getElementById("tokenPrice").innerText = "$" + t.price;
+  document.getElementById("tokenName").innerText = t.baseToken.name;
+  document.getElementById("tokenPrice").innerText = "$" + t.priceUsd;
 
-  document.getElementById("tokenSite").href = t.site;
-  document.getElementById("tokenTwitter").href = t.twitter;
-  document.getElementById("tokenTg").href = t.telegram;
+  document.getElementById("tokenSite").href = t.info?.website || "#";
+  document.getElementById("tokenTwitter").href = t.info?.twitter || "#";
+  document.getElementById("tokenTg").href = t.info?.telegram || "#";
 
-  // gráfico simples (placeholder)
-  document.getElementById("chart").innerHTML =
-    "📊 gráfico (integração TradingView aqui)";
+  // 🔥 GRÁFICO REAL TRADINGVIEW (FUNCIONANDO)
+  document.getElementById("chart").innerHTML = `
+    <iframe 
+      src="https://s.tradingview.com/widgetembed/?symbol=${t.baseToken.symbol}USD&interval=15&theme=dark"
+      style="width:100%; height:250px; border:none;">
+    </iframe>
+  `;
 }
 
 // =======================
-// BUSCA
+// ❌ FECHAR MODAL (CORRIGIDO)
 // =======================
-document.addEventListener("DOMContentLoaded", () => {
+function closeModal(){
+  document.getElementById("modal").style.display = "none";
+}
 
-  const input = document.getElementById("searchInput");
-
-  input.addEventListener("input", () => {
-    const v = input.value.toLowerCase();
-
-    const filtered = fallbackTokens.filter(t =>
-      t.name.toLowerCase().includes(v)
-    );
-
-    render(filtered);
-  });
-
+// clicar fora fecha
+window.addEventListener("click", (e)=>{
+  const modal = document.getElementById("modal");
+  if(e.target === modal){
+    modal.style.display = "none";
+  }
 });
 
 // =======================
 // INIT
 // =======================
-loadTokens();
+document.addEventListener("DOMContentLoaded", () => {
+  loadTokens();
+});
