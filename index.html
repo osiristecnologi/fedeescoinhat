@@ -1,153 +1,68 @@
-<style>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoinHat Feeds 🚀</title>
 
-:root{
-  --bg:#f4f7ff;
-  --card:#ffffff;
-  --blue:#1a6bff;
-  --green:#00e676;
-  --text:#0d1b3e;
-  --muted:#6b7fa8;
-}
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
 
-/* BASE */
-body{
-  margin:0;
-  font-family: 'Segoe UI', sans-serif;
-  background:linear-gradient(180deg,#eef3ff,#f8fbff);
-  color:var(--text);
-}
+<body>
 
-/* HEADER */
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px 16px;
-  background:white;
-  border-radius:0 0 20px 20px;
-  box-shadow:0 4px 20px rgba(0,0,0,.05);
-}
+<!-- HEADER -->
+<header>
+  <div class="logo">CoinHat</div>
 
-.logo{
-  font-weight:800;
-  font-size:1.2rem;
-  background:linear-gradient(135deg,var(--blue),var(--green));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
+  <div class="search-wrap">
+    <input id="searchInput" placeholder="Buscar cripto... 🔍">
+  </div>
+</header>
 
-/* SEARCH */
-.search-wrap input{
-  border:none;
-  padding:10px 14px;
-  border-radius:50px;
-  background:#eef3ff;
-  outline:none;
-}
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner" id="ticker">
+    BTC ↑ +2.4% • ETH ↓ -1.1% • DOGE ↑ +5.2%
+  </div>
+</div>
 
-/* GRID */
-.meme-grid{
-  padding:16px;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:14px;
-}
+<!-- GRID -->
+<div class="meme-grid" id="grid">
 
-/* CARD ESTILO APP */
-.meme-card{
-  background:var(--card);
-  border-radius:20px;
-  padding:14px;
-  box-shadow:0 6px 20px rgba(26,107,255,.08);
-  transition:.2s;
-  position:relative;
-  overflow:hidden;
-}
+  <div class="meme-card">
+    <div>Bitcoin</div>
+    <div class="meme-price pos">$65,000</div>
+  </div>
 
-.meme-card::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(135deg,rgba(26,107,255,.05),rgba(0,230,118,.05));
-  opacity:0;
-  transition:.2s;
-}
+  <div class="meme-card">
+    <div>Ethereum</div>
+    <div class="meme-price neg">$3,200</div>
+  </div>
 
-.meme-card:hover{
-  transform:translateY(-4px);
-}
+  <div class="meme-card">
+    <div>Dogecoin</div>
+    <div class="meme-price pos">$0.15</div>
+  </div>
 
-.meme-card:hover::before{
-  opacity:1;
-}
+  <div class="meme-card">
+    <div>Shiba Inu</div>
+    <div class="meme-price pos">$0.00002</div>
+  </div>
 
-.meme-card:active{
-  transform:scale(0.96);
-}
+</div>
 
-/* TEXTO */
-.meme-price{
-  font-weight:800;
-  font-size:1.1rem;
-}
+<!-- MODAL -->
+<div id="modal" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center;">
+  <div style="background:white; padding:20px; width:90%; max-width:300px;">
+    <h3 id="modalTitle">Crypto</h3>
+    <p id="modalPrice">$0</p>
+    <button onclick="closeModal()">Fechar</button>
+  </div>
+</div>
 
-.pos{color:var(--green);}
-.neg{color:#ff3d71;}
+<!-- JS -->
+<script src="script.js"></script>
 
-/* TICKER */
-.ticker-bar{
-  margin:10px;
-  border-radius:50px;
-  background:linear-gradient(90deg,var(--blue),#0040cc);
-  color:white;
-  padding:6px 12px;
-  overflow:hidden;
-}
-
-.ticker-inner{
-  white-space:nowrap;
-  animation:move 25s linear infinite;
-}
-
-@keyframes move{
-  from{transform:translateX(0)}
-  to{transform:translateX(-50%)}
-}
-
-/* MODAL BONITO */
-#modal{
-  backdrop-filter:blur(6px);
-}
-
-#modal > div{
-  border-radius:24px;
-  box-shadow:0 20px 60px rgba(0,0,0,.2);
-}
-
-/* BOTÕES */
-button{
-  border:none;
-  border-radius:50px;
-  padding:10px 16px;
-  background:linear-gradient(135deg,var(--blue),var(--green));
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-}
-
-/* LANG */
-.lang-menu{
-  border-radius:12px;
-  overflow:hidden;
-}
-
-.lang-opt:hover{
-  background:#eef3ff;
-}
-
-.lang-opt.selected{
-  background:var(--blue);
-  color:white;
-}
-
-</style>
+</body>
+</html>
