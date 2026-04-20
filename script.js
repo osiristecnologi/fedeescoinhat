@@ -10,34 +10,42 @@ function toggleLang(){
 }
 
 // =======================
-// TOKENS (DEXSCREENER API)
+// 🔥 TOKENS REAIS (FUNCIONA)
 // =======================
 async function loadTokens(){
 
-  const res = await fetch("https://api.dexscreener.com/latest/dex/tokens/eth");
-  const data = await res.json();
-
   const grid = document.getElementById("grid");
-  grid.innerHTML = "";
+  grid.innerHTML = "Carregando memecoins...";
 
-  data.pairs.slice(0,20).forEach(t => {
+  try{
 
-    const card = document.createElement("div");
-    card.className = "card";
+    const res = await fetch("https://api.dexscreener.com/latest/dex/pairs/bsc");
+    const data = await res.json();
 
-    card.innerHTML = `
-      <b>${t.baseToken.name}</b>
-      <div>$${t.priceUsd}</div>
-    `;
+    grid.innerHTML = "";
 
-    card.onclick = () => openModal(t);
+    data.pairs.slice(0,30).forEach(t => {
 
-    grid.appendChild(card);
-  });
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <b>${t.baseToken.name}</b>
+        <div>$${Number(t.priceUsd).toFixed(6)}</div>
+      `;
+
+      card.onclick = () => openModal(t);
+
+      grid.appendChild(card);
+    });
+
+  }catch(e){
+    grid.innerHTML = "Erro ao carregar tokens 😢";
+  }
 }
 
 // =======================
-// MODAL TOKEN
+// 🪟 MODAL COMPLETO
 // =======================
 function openModal(t){
 
@@ -49,20 +57,27 @@ function openModal(t){
   document.getElementById("tokenSite").href = t.info?.website || "#";
   document.getElementById("tokenTwitter").href = t.info?.twitter || "#";
   document.getElementById("tokenTg").href = t.info?.telegram || "#";
+
+  // 📊 GRÁFICO TRADINGVIEW
+  document.getElementById("chart").innerHTML = `
+    <iframe 
+      src="https://s.tradingview.com/widgetembed/?symbol=${t.baseToken.symbol}USD&interval=15&theme=dark"
+      width="100%" height="250" frameborder="0">
+    </iframe>
+  `;
 }
 
-// CLOSE
+// FECHAR
 function closeModal(){
   document.getElementById("modal").style.display = "none";
 }
 
 // =======================
-// NEWS (EXEMPLO SIMPLES)
+// 📰 NEWS (placeholder)
 // =======================
-async function loadNews(){
-  const newsDiv = document.getElementById("news");
-
-  newsDiv.innerHTML = "API notícia aqui (Cointelegraph)";
+function loadNews(){
+  document.getElementById("news").innerHTML =
+    "📰 Notícias em breve (Cointelegraph API limitada)";
 }
 
 // INIT
