@@ -1,68 +1,66 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CoinHat Feeds 🚀</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoinHat Feeds 🚀</title>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <!-- HEADER -->
 <header>
-  <div class="logo">CoinHat</div>
 
-  <div class="search-wrap">
-    <input id="searchInput" placeholder="Buscar cripto... 🔍">
-  </div>
+  <!-- MENU -->
+  <div class="icon" onclick="toggleMenu()">☰</div>
+
+  <!-- SEARCH -->
+  <input id="searchInput" placeholder="Buscar contrato/token 🔍">
+
+  <!-- LANG -->
+  <div class="icon" onclick="toggleLang()">🌐</div>
+
 </header>
 
-<!-- TICKER -->
-<div class="ticker-bar">
-  <div class="ticker-inner" id="ticker">
-    BTC ↑ +2.4% • ETH ↓ -1.1% • DOGE ↑ +5.2%
-  </div>
-</div>
+<!-- MENU LATERAL -->
+<div id="sidebar">
 
-<!-- GRID -->
-<div class="meme-grid" id="grid">
-
-  <div class="meme-card">
-    <div>Bitcoin</div>
-    <div class="meme-price pos">$65,000</div>
-  </div>
-
-  <div class="meme-card">
-    <div>Ethereum</div>
-    <div class="meme-price neg">$3,200</div>
-  </div>
-
-  <div class="meme-card">
-    <div>Dogecoin</div>
-    <div class="meme-price pos">$0.15</div>
-  </div>
-
-  <div class="meme-card">
-    <div>Shiba Inu</div>
-    <div class="meme-price pos">$0.00002</div>
-  </div>
+  <h3>📰 Notícias</h3>
+  <div id="news">Carregando...</div>
 
 </div>
+
+<!-- LANG MENU -->
+<div id="langBox">
+  <div>🇧🇷 Português</div>
+  <div>🇺🇸 English</div>
+  <div>🇪🇸 Español</div>
+  <div>🇯🇵 日本語</div>
+  <div>🇨🇳 中文</div>
+  <div>🇷🇺 Русский</div>
+</div>
+
+<!-- TOKENS -->
+<div id="grid"></div>
 
 <!-- MODAL -->
-<div id="modal" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center;">
-  <div style="background:white; padding:20px; width:90%; max-width:300px;">
-    <h3 id="modalTitle">Crypto</h3>
-    <p id="modalPrice">$0</p>
+<div id="modal">
+  <div class="modal-box">
+    <h3 id="tokenName"></h3>
+    <p id="tokenPrice"></p>
+
+    <a id="tokenSite" target="_blank">🌐 Site</a><br>
+    <a id="tokenTwitter" target="_blank">🐦 Twitter</a><br>
+    <a id="tokenTg" target="_blank">💬 Telegram</a>
+
+    <div id="chart">📊 gráfico aqui</div>
+
     <button onclick="closeModal()">Fechar</button>
   </div>
 </div>
 
-<!-- JS -->
 <script src="script.js"></script>
-
 </body>
 </html>
